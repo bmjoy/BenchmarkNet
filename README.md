@@ -18,7 +18,7 @@ Features:
 
 How it works?
 --------
-Each simulated client is one asynchronous task for establishing a connection with the server and processing the network events. Each task has one subtask which also works asynchronously to send network messages at a specified interval (15 messages per second by default). So, 1000 simulated clients is 1000 tasks with 1000 subtasks which works independently from each other. This sounds scary, but CPU usage is <1% for tasks itself and every operation is completely thread-safe. The clients send network messages to the server (500 reliable and 1000 unreliable by default). The server also sends messages to the clients in response (48 bytes per message by default).
+Each simulated client is one asynchronous task for establishing a connection with the server and processing the network events. Each task has one subtask which also works asynchronously to send network messages at a specified interval (15 messages per second by default). So, 1000 simulated clients is 1000 tasks with 1000 subtasks which works independently from each other. This sounds scary, but CPU usage is <1% for tasks itself and every operation is completely thread-safe. The clients send network messages to the server (500 reliable and 1000 unreliable by default). The server also sends messages to the clients in response (48 bytes per message by default). The application will monitor how the data is processed by the server and clients, and report their status in real-time.
 
 Usage
 --------
