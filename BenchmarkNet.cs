@@ -92,7 +92,7 @@ namespace BenchmarkNet {
 		private static void Main() {
 			Console.Title = title;
 			Console.SetIn(new StreamReader(Console.OpenStandardInput(8192), Console.InputEncoding, false, bufferSize: 1024));
-			Console.WriteLine("Welcome to BenchmarkNet!");
+			Console.WriteLine("Welcome to " + title + "!");
 			Console.WriteLine("Version " + version);
 			Console.WriteLine(Environment.NewLine + "Source code is available on GitHub (https://github.com/nxrighthere/BenchmarkNet)");
 			Console.WriteLine("If you have any questions, contact me (nxrighthere@gmail.com)");
