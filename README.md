@@ -30,6 +30,6 @@ If you want to simulate a bad network condition, use [Clumsy](http://jagt.github
 
 Discussion
 --------
-You can find the latest benchmark results in the thread on Unity forums.
+You can find the latest benchmark results in the [thread](https://forum.unity.com/threads/benchmarknet-stress-test-for-enet-unet-litenetlib-lidgren-and-miniudp.512507 "thread") on Unity forums.
 
 If you have any questions, contact me via [email](mailto:nxrighthere@gmail.com "email").
