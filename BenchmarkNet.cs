@@ -263,10 +263,11 @@ namespace BenchmarkNet {
 				}
 
 				if (!processActive && processCompleted) {
-					stopwatch.Stop();
 					Console.SetCursorPosition(0, Console.CursorTop - 1);
 					Console.WriteLine("Process completed! Press any key to exit...");
 				}
+				
+				stopwatch.Stop();
 			}, TaskCreationOptions.LongRunning);
 		}
 
