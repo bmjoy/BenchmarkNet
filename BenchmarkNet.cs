@@ -44,7 +44,7 @@ using MiniUDP;
 namespace BenchmarkNet {
 	public class BenchmarkNet {
 		protected const string title = "BenchmarkNet";
-		protected const string version = "1.01";
+		protected const string version = "1.02";
 		protected const string ip = "127.0.0.1";
 		protected static ushort port = 0;
 		protected static ushort maxClients = 0;
@@ -237,7 +237,7 @@ namespace BenchmarkNet {
 					Console.WriteLine("Server sent -> Reliable: " + serverReliableSent + " messages (" + serverReliableBytesSent + " bytes), Unreliable: " + serverUnreliableSent + " messages (" + serverUnreliableBytesSent + " bytes)");
 					Console.WriteLine("Clients received <- Reliable: " + clientsReliableReceived + " messages (" + clientsReliableBytesReceived + " bytes), Unreliable: " + clientsUnreliableReceived + " messages (" + clientsUnreliableBytesReceived + " bytes)");
 					Console.WriteLine("Total - Reliable: " + (clientsReliableSent + serverReliableReceived + serverReliableSent + clientsReliableReceived) + " messages (" + (clientsReliableBytesSent + serverReliableBytesReceived + serverReliableBytesSent + clientsReliableBytesReceived) + " bytes), Unreliable: " + (clientsUnreliableSent + serverUnreliableReceived + serverUnreliableSent + clientsUnreliableReceived) + " messages (" + (clientsUnreliableBytesSent + serverUnreliableBytesReceived + serverUnreliableBytesSent + clientsUnreliableBytesReceived) + " bytes)");
-					Console.WriteLine("Expected - Reliable: " + (maxClients * reliableMessages * 4) + " messages (" + (maxClients * reliableMessages * messageData.Length * 4) + " bytes), Unreliable: " + (maxClients * unreliableMessages * 4) + " messages (" + (maxClients * unreliableMessages * messageData.Length * 4) + " bytes)");
+					Console.WriteLine("Expected - Reliable: " + (maxClients * (ulong)reliableMessages * 4) + " messages (" + (maxClients * (ulong)reliableMessages * (ulong)messageData.Length * 4) + " bytes), Unreliable: " + (maxClients * (ulong)unreliableMessages * 4) + " messages (" + (maxClients * (ulong)unreliableMessages * (ulong)messageData.Length * 4) + " bytes)");
 					Console.WriteLine("Elapsed time: " + stopwatch.Elapsed.Hours.ToString("00") + ":" + stopwatch.Elapsed.Minutes.ToString("00") + ":" + stopwatch.Elapsed.Seconds.ToString("00"));
 
 					if (spinnerTimer >= 10) {
