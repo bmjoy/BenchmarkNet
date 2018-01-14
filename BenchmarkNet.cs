@@ -278,10 +278,10 @@ namespace BenchmarkNet {
 				while (processActive) {
 					Thread.Sleep(1000);
 
-					decimal currentData = (decimal)(serverReliableSent + serverReliableReceived + serverUnreliableSent + serverUnreliableReceived + clientsReliableSent + clientsReliableReceived + clientsUnreliableSent + clientsUnreliableReceived);
+					decimal currentData = ((decimal)serverReliableSent + (decimal)serverReliableReceived + (decimal)serverUnreliableSent + (decimal)serverUnreliableReceived + (decimal)clientsReliableSent + (decimal)clientsReliableReceived + (decimal)clientsUnreliableSent + (decimal)clientsUnreliableReceived);
 
 					if (currentData == lastData) {
-						if (currentData != 0 && ((currentData / (decimal)(maxClients * (reliableMessages + unreliableMessages) * 4)) * 100) < 90)
+						if (currentData != 0 && ((currentData / ((decimal)maxClients * ((decimal)reliableMessages + (decimal)unreliableMessages) * 4)) * 100) < 90)
 							processOverload = true;
 
 						processCompleted = true;
