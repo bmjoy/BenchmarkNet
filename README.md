@@ -1,4 +1,4 @@
-# BenchmarkNet
+# BenchmarkNet [![Bountysource](https://img.shields.io/badge/bountysource-donate-green.svg)](https://salt.bountysource.com/checkout/amount?team=nxrighthere)
 BenchmarkNet is a console application for testing the reliable UDP networking libraries.
 
 Supported networking libraries:
@@ -13,8 +13,6 @@ Features:
 - Stable under high loads
 - Simple and flexible simulation setup
 - Detailed session information
-
-[![Bountysource](https://img.shields.io/badge/bountysource-donate-green.svg)](https://salt.bountysource.com/checkout/amount?team=nxrighthere)
 
 How it works?
 --------
