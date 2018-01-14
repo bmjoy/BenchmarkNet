@@ -1,4 +1,4 @@
-# BenchmarkNet [![GitHub Release](https://img.shields.io/github/release/nxrighthere/BenchmarkNet/all.svg)](https://github.com/nxrighthere/BenchmarkNet/releases) [![Bountysource](https://img.shields.io/badge/bountysource-donate-green.svg)](https://salt.bountysource.com/checkout/amount?team=nxrighthere)
+# BenchmarkNet [![GitHub release](https://img.shields.io/github/release/nxrighthere/BenchmarkNet.svg)](https://github.com/nxrighthere/BenchmarkNet/releases) [![Bountysource](https://img.shields.io/badge/bountysource-donate-green.svg)](https://salt.bountysource.com/checkout/amount?team=nxrighthere)
 BenchmarkNet is a console application for testing the reliable UDP networking libraries.
 
 Supported networking libraries:
