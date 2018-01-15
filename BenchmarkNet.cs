@@ -595,15 +595,11 @@ namespace BenchmarkNet {
 
 	public class LiteNetLibBenchmark : BenchmarkNet {
 		private static void SendReliable(byte[] data, LiteNetLib.NetPeer peer) {
-			NetDataWriter writer = new NetDataWriter();
-			writer.Put(data);
-			peer.Send(writer, DeliveryMethod.ReliableOrdered); // Reliable Ordered (https://github.com/RevenantX/LiteNetLib/issues/68)
+			peer.Send(data, DeliveryMethod.ReliableOrdered); // Reliable Ordered (https://github.com/RevenantX/LiteNetLib/issues/68)
 		}
 
 		private static void SendUnreliable(byte[] data, LiteNetLib.NetPeer peer) {
-			NetDataWriter writer = new NetDataWriter();
-			writer.Put(data);
-			peer.Send(writer, DeliveryMethod.Sequenced); // Unreliable Sequenced
+			peer.Send(data, DeliveryMethod.Sequenced); // Unreliable Sequenced
 		}
 
 		public static void Server() {
