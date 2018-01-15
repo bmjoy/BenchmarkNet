@@ -294,10 +294,8 @@ namespace BenchmarkNet {
 					lastData = currentData;
 				}
 
-				if (!processActive) {
-					if (selectedNetworkingLibrary == 0)
-						Library.Deinitialize();
-				}
+				if (selectedNetworkingLibrary == 0)
+					Library.Deinitialize();
 			}, TaskCreationOptions.LongRunning);
 		}
 
