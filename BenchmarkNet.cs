@@ -230,7 +230,7 @@ namespace BenchmarkNet {
 						Console.ResetColor();
 					}
 
-					Console.WriteLine(Environment.NewLine + "Server status: " + (processOverload ? "Overload" : (processCompleted ? "Completed" : (serverThread.IsAlive ? "Running" : "Failure"))));
+					Console.WriteLine(Environment.NewLine + "Server status: " + (processOverload ? "Overload" : (processCompleted && serverThread.IsAlive ? "Completed" : (serverThread.IsAlive ? "Running" : "Failure"))));
 					Console.WriteLine("Clients status: " + clientsStartedCount + " started, " + clientsConnectedCount + " connected, " + clientsDisconnectedCount + " dropped");
 					Console.WriteLine("Clients sent -> Reliable: " + clientsReliableSent + " messages (" + clientsReliableBytesSent + " bytes), Unreliable: " + clientsUnreliableSent + " messages (" + clientsUnreliableBytesSent + " bytes)");
 					Console.WriteLine("Server received <- Reliable: " + serverReliableReceived + " messages (" + serverReliableBytesReceived + " bytes), Unreliable: " + serverUnreliableReceived + " messages (" + serverUnreliableBytesReceived + " bytes)");
