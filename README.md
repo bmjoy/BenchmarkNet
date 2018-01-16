@@ -7,6 +7,7 @@ Supported networking libraries:
 - [LiteNetLib](https://github.com/RevenantX/LiteNetLib "LiteNetLib")
 - [Lidgren](https://github.com/lidgren/lidgren-network-gen3 "Lidgren")
 - [MiniUDP](https://github.com/ashoulson/MiniUDP "MiniUDP")
+- [Hazel](https://github.com/DarkRiftNetworking/Hazel-Networking "Hazel")
 
 Features:
 - Asynchronous simulation of a large number of clients
