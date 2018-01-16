@@ -40,6 +40,9 @@ using LiteNetLib.Utils;
 using Lidgren.Network;
 // MiniUDP (https://github.com/ashoulson/MiniUDP)
 using MiniUDP;
+// Hazel (https://github.com/DarkRiftNetworking/Hazel-Networking)
+using Hazel;
+using Hazel.Udp;
 
 namespace BenchmarkNet {
 	public class BenchmarkNet {
@@ -81,12 +84,13 @@ namespace BenchmarkNet {
 		protected static volatile int clientsUnreliableBytesReceived = 0;
 		private static ushort maxPeers = 0;
 		private static byte selectedNetworkingLibrary = 0;
-		private static readonly string[] networkingLibraries = new string[] {
+		private static readonly string[] networkingLibraries = {
 			"ENet",
 			"UNet",
 			"LiteNetLib",
 			"Lidgren",
-			"MiniUDP"
+			"MiniUDP",
+			"Hazel"
 		};
 
 		private static void Main() {
@@ -193,8 +197,10 @@ namespace BenchmarkNet {
 				serverThread = new Thread(LiteNetLibBenchmark.Server);
 			else if (selectedNetworkingLibrary == 3)
 				serverThread = new Thread(LidgrenBenchmark.Server);
-			else
+			else if (selectedNetworkingLibrary == 4)
 				serverThread = new Thread(MiniUDPBenchmark.Server);
+			else
+				serverThread = new Thread(HazelBenchmark.Server);
 
 			serverThread.Start();
 			Thread.Sleep(100);
@@ -315,8 +321,10 @@ namespace BenchmarkNet {
 						clients.Add(LiteNetLibBenchmark.Client());
 					else if (selectedNetworkingLibrary == 3)
 						clients.Add(LidgrenBenchmark.Client());
-					else
+					else if (selectedNetworkingLibrary == 4)
 						clients.Add(MiniUDPBenchmark.Client());
+					else
+						clients.Add(HazelBenchmark.Client());
 					
 					Interlocked.Increment(ref clientsStartedCount);
 					Thread.Sleep(15);
@@ -934,6 +942,107 @@ namespace BenchmarkNet {
 				}
 
 				client.Stop();
+			}, TaskCreationOptions.LongRunning);
+		}
+	}
+
+	public class HazelBenchmark : BenchmarkNet {
+		public static void Server() {
+			UdpConnectionListener server = new UdpConnectionListener(new NetworkEndPoint(ip, port));
+
+			server.Start();
+
+			server.NewConnection += (peer, netEvent) => {
+				netEvent.Connection.DataReceived += (sender, data) => {
+					if (data.SendOption == SendOption.Reliable) {
+						Interlocked.Increment(ref serverReliableReceived);
+						Connection senderConnection = (Connection)sender;
+						senderConnection.SendBytes(messageData, SendOption.Reliable);
+						Interlocked.Increment(ref serverReliableSent);
+						Interlocked.Add(ref serverReliableBytesSent, messageData.Length);
+						Interlocked.Add(ref serverReliableBytesReceived, data.Bytes.Length);
+					} else if (data.SendOption == SendOption.None) {
+						Interlocked.Increment(ref serverUnreliableReceived);
+						Connection senderConnection = (Connection)sender;
+						senderConnection.SendBytes(messageData, SendOption.None);
+						Interlocked.Increment(ref serverUnreliableSent);
+						Interlocked.Add(ref serverUnreliableBytesSent, messageData.Length);
+						Interlocked.Add(ref serverUnreliableBytesReceived, data.Bytes.Length);
+					}
+
+					data.Recycle();
+				};
+
+				netEvent.Recycle();
+			};
+
+			while (processActive) {
+				Thread.Sleep(1000 / serverTickRate);
+			}
+
+			server.Close();
+		}
+
+		public static async Task Client() {
+			await Task.Factory.StartNew(() => {
+				UdpClientConnection client = new UdpClientConnection(new NetworkEndPoint(ip, port));
+
+				client.Connect();
+
+				int reliableToSend = 0;
+				int unreliableToSend = 0;
+				int reliableSentCount = 0;
+				int unreliableSentCount = 0;
+
+				Task.Factory.StartNew(async() => {
+					while (processActive) {
+						if (reliableToSend > 0) {
+							client.SendBytes(messageData, SendOption.Reliable);
+							Interlocked.Decrement(ref reliableToSend);
+							Interlocked.Increment(ref reliableSentCount);
+							Interlocked.Increment(ref clientsReliableSent);
+							Interlocked.Add(ref clientsReliableBytesSent, messageData.Length);
+						}
+
+						if (unreliableToSend > 0) {
+							client.SendBytes(messageData, SendOption.None);
+							Interlocked.Decrement(ref unreliableToSend);
+							Interlocked.Increment(ref unreliableSentCount);
+							Interlocked.Increment(ref clientsUnreliableSent);
+							Interlocked.Add(ref clientsUnreliableBytesSent, messageData.Length);
+						}
+
+						await Task.Delay(1000 / sendRate);
+					}
+				}, TaskCreationOptions.LongRunning);
+
+				if (client.State == Hazel.ConnectionState.Connected) {
+					Interlocked.Increment(ref clientsConnectedCount);
+					Interlocked.Exchange(ref reliableToSend, reliableMessages);
+					Interlocked.Exchange(ref unreliableToSend, unreliableMessages);
+				}
+
+				client.Disconnected += (sender, data) => {
+					Interlocked.Increment(ref clientsDisconnectedCount);
+				};
+
+				client.DataReceived += (sender, data) => {
+					if (data.SendOption == SendOption.Reliable) {
+						Interlocked.Increment(ref clientsReliableReceived);
+						Interlocked.Add(ref clientsReliableBytesReceived, data.Bytes.Length);
+					} else if (data.SendOption == SendOption.None) {
+						Interlocked.Increment(ref clientsUnreliableReceived);
+						Interlocked.Add(ref clientsUnreliableBytesReceived, data.Bytes.Length);
+					}
+
+					data.Recycle();
+				};
+
+				while (processActive) {
+					Thread.Sleep(1000 / clientTickRate);
+				}
+
+				client.Close();
 			}, TaskCreationOptions.LongRunning);
 		}
 	}
